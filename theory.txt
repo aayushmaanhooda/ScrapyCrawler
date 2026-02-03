@@ -1,0 +1,38 @@
+SPIDER
+
+ITEMS - Defines what data you want to collect. 
+        Like a shopping list—you decide the fields (title, price, stock) before scraping.
+        You tell Scrapy "I only care about title and price, nothing else."
+
+
+MIDDLEWARES -   Intercepts requests and responses. Use it to add proxies, change user-agents, handle retries, 
+                or modify responses before your spider sees them.
+
+                Before your request goes out, middleware can swap your IP address so the website doesn't block you. When response comes back,
+                middleware can check if you got blocked and retry.
+
+PIPELINES - Processes items after extraction. Clean data, validate it, remove duplicates, save to database. 
+            Items flow through pipelines in order based on number (100 runs before 200).
+
+            Your spider extracted price as "£51.77". Pipeline converts it to 51.77 as a number. 
+            Then the next pipeline saves it to PostgreSQL.
+
+SETTINGS - Controls everything. Turn features on/off, set speed limits, configure which middlewares and pipelines are active.
+           You decide: "Use the proxy middleware, use both pipelines, wait 2 seconds between requests."
+
+
+                                                            Spider: "Get this URL"
+                                                                ↓
+                                                            Middleware: "Let me add a fake browser header and proxy IP"
+                                                                ↓
+                                                            Website: "Here's the HTML"
+                                                                ↓
+                                                            Middleware: "Response looks good, pass it through"
+                                                                ↓
+                                                            Spider: "Found title='Harry Potter', price='£51.77'"
+                                                                ↓
+                                                            Pipeline 1: "Converted price to 51.77"
+                                                                ↓
+                                                            Pipeline 2: "Saved to database"
+                                                                ↓
+                                                            Done

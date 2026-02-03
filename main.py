@@ -1,5 +1,5 @@
 def main():
-    print("Hello from book-crawler!")
+    print("Hello from ScrapyCrawler!")
 
 
 if __name__ == "__main__":
